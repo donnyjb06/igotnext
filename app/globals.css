@@ -119,6 +119,7 @@
   --color-highlights: #FACC15;
   --color-off-white: #F8FAFC;
   --color-light-grey: #E2E8F0;
+  --ease-bounce: linear(0, 0.065 6.1%, 0.118 9.8%, 0.185 13%, 0.274 15.9%, 0.546 21.5%, 0.997 27.7%, 0.543 34.1%, 0.448 36.4%, 0.419 38.5%, 0.453 40.6%, 0.551 42.7%, 0.996 48%, 0.693 51.9%, 0.628 53.4%, 0.605 54.9%, 0.627 56.4%, 0.691 57.9%, 0.999 62%, 0.8 65%, 0.757 66.2%, 0.742 67.4%, 0.756 68.6%, 0.796 69.8%, 0.999 73.4%, 0.886 75.7%, 0.849 77.8%, 0.88 79.9%, 1 83.2%, 0.947 85.1%, 0.93 86.9%, 0.942 88.5%, 1 92%, 0.983 94.5%, 1);
 }
 
 @layer components {
@@ -128,6 +129,19 @@
 
   .rounded-btn {
     @apply text-base/[1.2] font-medium rounded-[8px] cursor-pointer;
+  }
+
+  .custom-label {
+    @apply text-light-grey font-medium text-sm/[1.45];
+  }
+
+  .custom-input {
+    @apply rounded-full border-accent;
+  }
+
+  .primary-btn {
+    @apply bg-accent py-[12px] font-medium text-off-white text-sm/[1.5] hover:bg-off-white 
+      hover:text-accent transition duration-300 ease-in-out;
   }
 }
 
