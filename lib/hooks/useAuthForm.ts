@@ -1,8 +1,8 @@
-import { useForm } from 'react-hook-form';
+import { set, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { getAuthFormSchema } from '@/lib/utils';
-import { useSignUp } from '@clerk/nextjs';
+import { useSignUp, useSignIn } from '@clerk/nextjs';
 import { signUpNewUser } from '@/lib/actions/server-actions';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -11,7 +11,8 @@ import { signUpUserData } from '@/types';
 
 export const useAuthForm = (type: 'sign-in' | 'sign-up') => {
   const router = useRouter();
-  const { signUp, isLoaded, setActive } = useSignUp();
+  const { signUp, isLoaded: isSignUpLoaded, setActive: setSignUpActive } = useSignUp();
+  const { signIn, isLoaded: isSignInLoaded, setActive: setSignInActive } = useSignIn();
   const isSignIn = type === 'sign-in';
 
   const formSchema = getAuthFormSchema(isSignIn);
@@ -26,14 +27,13 @@ export const useAuthForm = (type: 'sign-in' | 'sign-up') => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (!isLoaded) {
+  const signUphandler = async (values: z.infer<typeof formSchema>) => {
+    if (!isSignUpLoaded) {
       toast.warning('Loading authentication client. Please wait!');
       return;
     }
 
     try {
-      if (!isSignIn) {
         const clerkResult = await signUp.create({
           emailAddress: values.email,
           password: values.password,
@@ -41,7 +41,9 @@ export const useAuthForm = (type: 'sign-in' | 'sign-up') => {
 
         const clerkId = clerkResult.createdUserId;
         if (!clerkId) {
-          toast.error('Something went wrong when trying to create your account!');
+          toast.error(
+            'Something went wrong when trying to create your account!',
+          );
           return;
         }
 
@@ -60,18 +62,65 @@ export const useAuthForm = (type: 'sign-in' | 'sign-up') => {
         }
 
         const userSessionId = clerkResult.createdSessionId;
-        setActive({
+
+        if (!userSessionId) {
+          toast.error("sign-in failed! Try again")
+        }
+
+        setSignUpActive({
           session: userSessionId,
         });
 
-        toast.success("Account created successfully!");
+        toast.success('Account created successfully!');
         router.push('/');
-      }
     } catch (error) {
       console.error('An error occurred:', error);
-      toast.error(error instanceof Error ? error.message : 'An unknown error occurred!');
+      toast.error(
+        error instanceof Error ? error.message : 'An unknown error occurred!',
+      );
     }
   };
+
+  const signInhandler = async (values: z.infer<typeof formSchema>) => {
+    if (!isSignInLoaded) {
+      toast.warning('Loading authentication client. Please wait!');
+      return;
+    }
+
+    try {
+      const clerkResult = await signIn?.create({
+        strategy: "password",
+        identifier: values.email,
+        password: values.password
+      })
+
+    const userSessionId = clerkResult.createdSessionId;
+
+    if (!userSessionId) {
+      toast.error("sign-in failed! Try again")
+    }
+
+    setSignInActive({
+      session: userSessionId
+    })
+
+    toast.success("Successfully signed in!")
+    router.push("/")
+    } catch (error) {
+      console.error('An error occurred:', error);
+      toast.error(
+        error instanceof Error ? error.message : 'An unknown error occurred!',
+      );
+    }
+  }
+
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
+    if (isSignIn) {
+      signInhandler(values)
+    } else {
+      signUphandler(values)
+    }
+  }
 
   return { form, onSubmit, isSignIn };
 };
