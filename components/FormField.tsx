@@ -24,7 +24,6 @@ const FormField = ( { control, name, label, placeholder, type="text" }: FormFiel
       </FormControl>
       {fieldState.error ? (
         <p className='body-text text-red-500 max-w-[250px]'>{fieldState.error.message}</p>
-      ) : null}
     </FormItem>
     )}/>
   )
