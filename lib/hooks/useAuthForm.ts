@@ -1,4 +1,4 @@
-import { set, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { getAuthFormSchema } from '@/lib/utils';
@@ -97,7 +97,7 @@ export const useAuthForm = (type: 'sign-in' | 'sign-up') => {
     const userSessionId = clerkResult.createdSessionId;
 
     if (!userSessionId) {
-      toast.error("sign-in failed! Try again")
+      toast.error("Sign-in failed! Try again")
     }
 
     setSignInActive({
