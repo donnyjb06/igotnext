@@ -3,8 +3,7 @@ import prisma from "@/lib/prisma";
 
 export const POST = async (req: NextRequest) => {
     try {
-      const { clerkId, email, userName, fullName, position } = await req.json()
-      console.log(clerkId, email, userName, fullName, position);
+      const { clerkId, email, userName, fullName, position } = await req.json();
 
       const authHeader = req.headers.get("Authorization");
       const serverSecret = process.env.API_SECRET_KEY;
