@@ -24,7 +24,7 @@ export default function RootLayout({
       <html lang='en'>
         <body className={`${robotoSans.variable} antialiased`}>
         {children}
-        <Toaster className=''/>
+        <Toaster richColors/>
         </body>
       </html>
     </ClerkProvider>
