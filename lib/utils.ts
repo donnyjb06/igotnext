@@ -1,20 +1,18 @@
-import PositionSelect from "@/components/FormSelectField"
-import { Position } from "@/types/Position"
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-import { z } from "zod"
+import { Position, SelectValueProps } from '@/types/';
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+import { z } from 'zod';
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
-
-export const positionsList: SelectValueProps<T>[] = [
-  { value: Position.PG, label: "Point Guard" },
-  { value: Position.SG, label: "Shooting Guard" },
-  { value: Position.SF, label: "Small Forward" },
-  { value: Position.PF, label: "Power Forward" },
-  { value: Position.C, label: "Center" }
+export const positionsList: SelectValueProps<Position>[] = [
+  { value: Position.PG, label: 'Point Guard' },
+  { value: Position.SG, label: 'Shooting Guard' },
+  { value: Position.SF, label: 'Small Forward' },
+  { value: Position.PF, label: 'Power Forward' },
+  { value: Position.C, label: 'Center' },
 ];
 
 export const getAuthFormSchema = (isSignIn: boolean) => {
@@ -38,4 +36,9 @@ export const getAuthFormSchema = (isSignIn: boolean) => {
       Position.C,
     ]),
   });
+};
+
+export const toastMessages = {
+  loggedIn: 'Successfully signed in!',
+  loadingClient: 'Loading authentication client. Please wait!',
 };
