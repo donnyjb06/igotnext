@@ -3,6 +3,8 @@ import { Roboto } from 'next/font/google';
 import './globals.css';
 import { ClerkProvider } from '@clerk/nextjs';
 import { Toaster } from '@/components/ui/sonner';
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from '@vercel/analytics/react';
 
 const robotoSans = Roboto({
   variable: '--font-roboto-sans',
@@ -25,6 +27,8 @@ export default function RootLayout({
         <body className={`${robotoSans.variable} antialiased`}>
         {children}
         <Toaster richColors/>
+        <SpeedInsights />
+        <Analytics />
         </body>
       </html>
     </ClerkProvider>
