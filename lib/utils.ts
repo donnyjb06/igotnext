@@ -43,3 +43,19 @@ export const toastMessages = {
   loggedIn: 'Successfully signed in!',
   loadingClient: 'Loading authentication client. Please wait!',
 };
+
+
+export const getOnboardingSchema = () => {
+  return z.object({
+    fullName: z.string().min(2).max(100),
+    userName: z.string().min(4).max(15),
+    email: z.string().email(),
+    position: z.enum([
+      Position.PG,
+      Position.SG,
+      Position.SF,
+      Position.PF,
+      Position.C,
+    ]),
+  })
+}
