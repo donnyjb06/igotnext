@@ -10,9 +10,11 @@ import PositionSelect from './FormSelectField';
 import { positionsList } from '@/lib/utils';
 import { FormType } from '@/types';
 import { useAuthForm } from '@/lib/hooks/useAuthForm';
+import { useGoogleAuth } from '@/lib/hooks/useGoogleAuth';
 
 const AuthForm = ({ type }: { type: FormType }) => {
   const { form, onSubmit, isSignIn } = useAuthForm(type);
+  const handleClick = useGoogleAuth(type);
 
   return (
     <div className='min-h-screen flex items-center justify-center my-5'>
@@ -35,18 +37,15 @@ const AuthForm = ({ type }: { type: FormType }) => {
           </div>
 
           <div className='flex flex-col gap-4 items-stretch'>
-            <form action={async () => {
-              
-            }} className='flex justify-center'>
-              <Button
-                type='submit'
-                className='rounded-btn bg-off-white text-background-blue self-stretch
+            <Button
+              type='submit'
+              className='rounded-btn bg-off-white text-background-blue self-stretch
                 hover:bg-accent flex items-center transition-colors
-                duration-300 ease-out hover:text-off-white active:bg-accent active:text-off-white'>
-                <FaGoogle className='h-5 w-5 ' />
-                Continue with Google
-              </Button>
-            </form>
+                duration-300 ease-out hover:text-off-white active:bg-accent active:text-off-white'
+                onClick={handleClick}>
+              <FaGoogle className='h-5 w-5 ' />
+              Continue with Google
+            </Button>
 
             <hr />
             <p className='body-text relative text-center w-auto'>
