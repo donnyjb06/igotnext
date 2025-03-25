@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { getAuthFormSchema } from '@/lib/utils';
+import { getAuthFormSchema, toastMessages } from '@/lib/utils';
 import { useSignUp, useSignIn } from '@clerk/nextjs';
 import { signUpNewUser } from '@/lib/actions/server-actions';
 import { toast } from 'sonner';
@@ -29,7 +29,7 @@ export const useAuthForm = (type: 'sign-in' | 'sign-up') => {
 
   const signUphandler = async (values: z.infer<typeof formSchema>) => {
     if (!isSignUpLoaded) {
-      toast.warning('Loading authentication client. Please wait!');
+      toast.warning(toastMessages.loadingClient);
       return;
     }
 
@@ -83,7 +83,7 @@ export const useAuthForm = (type: 'sign-in' | 'sign-up') => {
 
   const signInhandler = async (values: z.infer<typeof formSchema>) => {
     if (!isSignInLoaded) {
-      toast.warning('Loading authentication client. Please wait!');
+      toast.warning(toastMessages.loadingClient);
       return;
     }
 
@@ -104,7 +104,7 @@ export const useAuthForm = (type: 'sign-in' | 'sign-up') => {
       session: userSessionId
     })
 
-    toast.success("Successfully signed in!")
+    toast.success(toastMessages.loggedIn)
     router.push("/")
     } catch (error) {
       console.error('An error occurred:', error);
