@@ -131,17 +131,21 @@
     @apply text-base/[1.2] font-medium rounded-[8px] cursor-pointer;
   }
 
-  .custom-label {
-    @apply text-light-grey font-medium text-sm/[1.45];
+  .sm-body {
+    @apply text-light-grey font-normal !text-sm/[1.45];
   }
 
   .custom-input {
-    @apply rounded-full border-accent;
+    @apply !rounded-[8px] !outline-accent;
   }
 
   .primary-btn {
     @apply bg-accent py-[12px] font-medium text-off-white text-sm/[1.5] hover:bg-off-white 
       hover:text-accent transition duration-300 ease-in-out;
+  }
+
+  .highlighted-text {
+    @apply font-medium text-highlights;
   }
 }
 

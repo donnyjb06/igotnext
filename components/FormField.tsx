@@ -29,9 +29,8 @@ const FormField = <T extends FieldValues>({
       render={({ field, fieldState }) => (
         <FormItem className='mb-0'>
           <FormLabel className='label'>{label}</FormLabel>
-          <FormControl>
+          <FormControl >
             <Input
-              className='custom-input'
               placeholder={placeholder}
               {...field}
               type={type}

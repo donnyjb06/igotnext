@@ -11,6 +11,7 @@ import { positionsList } from '@/lib/utils';
 import { FormType } from '@/types';
 import { useAuthForm } from '@/lib/hooks/useAuthForm';
 import { useGoogleAuth } from '@/lib/hooks/useGoogleAuth';
+import Link from 'next/link';
 
 const AuthForm = ({ type }: { type: FormType }) => {
   const { form, onSubmit, isSignIn } = useAuthForm(type);
@@ -42,13 +43,13 @@ const AuthForm = ({ type }: { type: FormType }) => {
               className='rounded-btn bg-off-white text-background-blue self-stretch
                 hover:bg-accent flex items-center transition-colors
                 duration-300 ease-out hover:text-off-white active:bg-accent active:text-off-white'
-                onClick={handleClick}>
+              onClick={handleClick}>
               <FaGoogle className='h-5 w-5 ' />
               Continue with Google
             </Button>
 
             <hr />
-            <p className='body-text relative text-center w-auto'>
+            <p className='sm-body relative text-center w-auto'>
               <span className='p-2 bg-background-blue'>
                 or
                 {isSignIn ? ' continue ' : ' sign up '}
@@ -103,11 +104,20 @@ const AuthForm = ({ type }: { type: FormType }) => {
 
               <button
                 type='submit'
-                className='rounded-btn primary-btn w- w-full'>
+                className='rounded-btn primary-btn w-full mb-0'>
                 {isSignIn ? 'Sign in' : 'Create Account'}
               </button>
             </form>
           </Form>
+
+          <p className='sm-body flex gap-[5px] self-center'>
+            {isSignIn ? "Don't have an account?" : 'Already have an account?'}
+            <Link
+              href={isSignIn ? '/sign-up' : '/sign-in'}
+              className='highlighted-text hover:scale-105 transition duration-300 ease-in-out'>
+              {isSignIn ? 'Sign up' : 'Sign in'}
+            </Link>
+          </p>
         </div>
       </div>
     </div>
