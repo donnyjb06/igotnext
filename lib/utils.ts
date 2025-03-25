@@ -1,4 +1,5 @@
-import { Position, SelectValueProps } from '@/types/';
+import { SelectValueProps } from '@/types/index';
+import { Position } from '@/types/Position';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { z } from 'zod';
