@@ -6,16 +6,6 @@ import React from 'react';
 
 
 const RootLayout: React.FC<LayoutProps> = async ({ children }) => {
-  const { userId: currentUserId } = await auth()
-  if (!currentUserId) {
-    redirect("/sign-in")
-  }
-
-  const isSignUpCompleted = await verifyUserId(currentUserId)
-  if (!isSignUpCompleted) {
-    redirect("/onboarding")
-  }
-
   return children;
 };
 

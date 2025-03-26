@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { getAuthFormSchema, toastMessages } from '@/lib/utils';
 import { useSignUp, useSignIn } from '@clerk/nextjs';
-import { signUpNewUser } from '@/lib/actions/server-actions';
+import { completeOnboarding, signUpNewUser } from '@/lib/actions/server-actions';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { Position } from '@/types/Position';
@@ -71,8 +71,14 @@ export const useAuthForm = (type: 'sign-in' | 'sign-up') => {
           session: userSessionId,
         });
 
+        const setMetadataResult = await completeOnboarding()
+
+        if (setMetadataResult.error) {
+          toast.error(setMetadataResult.error)
+        }
+
         toast.success('Account created successfully!');
-        router.push('/');
+        router.push('/home');
     } catch (error) {
       console.error('An error occurred:', error);
       toast.error(
@@ -105,7 +111,7 @@ export const useAuthForm = (type: 'sign-in' | 'sign-up') => {
     })
 
     toast.success(toastMessages.loggedIn)
-    router.push("/")
+    router.push("/home")
     } catch (error) {
       console.error('An error occurred:', error);
       toast.error(

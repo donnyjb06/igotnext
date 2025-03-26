@@ -1,6 +1,32 @@
-import { clerkMiddleware } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export default clerkMiddleware();
+const isOnboardingRoute = createRouteMatcher(['/onboarding'])
+const isPublicRoute = createRouteMatcher(['/'])
+
+export default clerkMiddleware(async (auth, req: NextRequest) => {
+  const { userId, sessionClaims, redirectToSignIn } = await auth();
+
+  if (userId && isOnboardingRoute(req)) {
+    if (sessionClaims?.metadata?.onboardingComplete) {
+      return NextResponse.redirect(new URL("home"))
+    }
+    return NextResponse.next()
+  }
+
+  if (!userId && !isPublicRoute(req)) {
+    return redirectToSignIn({ returnBackUrl: req.url })
+  }
+
+  if (userId && !sessionClaims?.metadata?.onboardingComplete) {
+    const onboardingUrl = new URL("/onboarding", req.url)
+    return NextResponse.redirect(onboardingUrl)
+  }
+
+  if (userId && !isPublicRoute(req)) {
+    return NextResponse.next()
+  }
+});
 
 export const config = {
   matcher: [

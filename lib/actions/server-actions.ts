@@ -1,6 +1,7 @@
 'use server';
 
 import { signUpUserData } from '@/types';
+import { auth, clerkClient } from '@clerk/nextjs/server';
 
 export const signUpNewUser = async (userData: signUpUserData) => {
   try {
@@ -64,3 +65,25 @@ export const verifyUserId = async (currentUserId: string | null) => {
     return false;
   }
 };
+
+export const completeOnboarding = async () => {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return { error: "User is not logged in! Please log in!" }
+  }
+
+  const client = await clerkClient();
+
+  try {
+    const res = await client.users.updateUser(userId, {
+      publicMetadata: {
+        onboardingComplete: true,
+      }
+    })
+
+    return { message: res.publicMetadata }
+  } catch (err) {
+    return { error: "There was an error updating the metadata" }
+  }
+}
