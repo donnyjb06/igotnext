@@ -7,12 +7,10 @@ export const useGoogleAuth = (type: FormType) => {
   const {
     signIn,
     isLoaded: isSignInLoaded,
-    setActive: setSignInActive,
   } = useSignIn();
   const {
     signUp,
     isLoaded: isSignUpLoaded,
-    setActive: setSignUpActive,
   } = useSignUp();
 
   const handleSignIn = async () => {
