@@ -1,5 +1,5 @@
 import { SelectValueProps } from '@/types/index';
-import { Position } from '@/types/Position';
+import { Position } from '@prisma/client';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { z } from 'zod';
@@ -29,13 +29,7 @@ export const getAuthFormSchema = (isSignIn: boolean) => {
         /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
         'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
       ),
-    position: z.enum([
-      Position.PG,
-      Position.SG,
-      Position.SF,
-      Position.PF,
-      Position.C,
-    ]),
+    position: z.nativeEnum(Position),
   });
 };
 
@@ -44,18 +38,11 @@ export const toastMessages = {
   loadingClient: 'Loading authentication client. Please wait!',
 };
 
-
 export const getOnboardingSchema = () => {
   return z.object({
     fullName: z.string().min(2).max(100),
     userName: z.string().min(4).max(15),
     email: z.string().email(),
-    position: z.enum([
-      Position.PG,
-      Position.SG,
-      Position.SF,
-      Position.PF,
-      Position.C,
-    ]),
-  })
-}
+    position: z.nativeEnum(Position),
+  });
+};

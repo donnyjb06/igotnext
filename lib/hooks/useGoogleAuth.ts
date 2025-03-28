@@ -22,8 +22,8 @@ export const useGoogleAuth = (type: FormType) => {
     try {
       await signIn.authenticateWithRedirect({
         strategy: 'oauth_google',
-        redirectUrl: '/',
-        redirectUrlComplete: '/'
+        redirectUrl: '/home',
+        redirectUrlComplete: '/home'
       });
     } catch (error) {
       console.error('An error has occured!', error);

@@ -1,29 +1,21 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
-import { NextRequest, NextResponse } from 'next/server';
+import { verifyIsOnboardingComplete } from './lib/actions/db.actions';
+import { NextResponse } from 'next/server';
 
+const isPublicRoute = createRouteMatcher(['/', '/sign-in(.*)', '/sign-up(.*)', '/onboarding'])
 const isOnboardingRoute = createRouteMatcher(['/onboarding'])
-const isPublicRoute = createRouteMatcher(['/'])
 
-export default clerkMiddleware(async (auth, req: NextRequest) => {
-  const { userId, sessionClaims, redirectToSignIn } = await auth();
 
+export default clerkMiddleware(async (auth, req) => {
+  const userId = await auth();
+
+  // For users visiting /onboarding dont redirect (redirect is done within the onboarding page)
   if (userId && isOnboardingRoute(req)) {
-    if (sessionClaims?.metadata?.onboardingComplete) {
-      return NextResponse.redirect(new URL("home"))
-    }
     return NextResponse.next()
   }
 
-  if (!userId && !isPublicRoute(req)) {
-    return redirectToSignIn({ returnBackUrl: req.url })
-  }
-
-  if (userId && !sessionClaims?.metadata?.onboardingComplete) {
-    const onboardingUrl = new URL("/onboarding", req.url)
-    return NextResponse.redirect(onboardingUrl)
-  }
-
-  if (userId && !isPublicRoute(req)) {
+  // For users visiting /sign-in or /sign-up dont redirect (redirect is done within the sign-in and sign-up pages)
+  if (userId && (isPublicRoute(req))) {
     return NextResponse.next()
   }
 });

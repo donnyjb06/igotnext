@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Position } from './types/Position';
+import { Position } from '@prisma/client';
 
 type FormType = 'sign-in' | 'sign-up';
 
@@ -19,4 +19,3 @@ interface signUpUserData {
 interface LayoutProps {
   children: ReactNode;
 }
-

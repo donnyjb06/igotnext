@@ -3,10 +3,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { getAuthFormSchema, toastMessages } from '@/lib/utils';
 import { useSignUp, useSignIn } from '@clerk/nextjs';
-import { completeOnboarding, signUpNewUser } from '@/lib/actions/server-actions';
+import { saveNewUserToDb } from '@/lib/actions/server-actions';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { Position } from '@/types/Position';
+import { Position } from '@prisma/client';
 import { signUpUserData } from '@/types';
 
 export const useAuthForm = (type: 'sign-in' | 'sign-up') => {
@@ -55,30 +55,27 @@ export const useAuthForm = (type: 'sign-in' | 'sign-up') => {
           position: values.position,
         };
 
-        const response = await signUpNewUser(userData);
+        const response = await saveNewUserToDb(userData);
         if (!response) {
-          toast.error('An error has occurred!');
+          console.error("An error has occured: User details not returned from saveNewUserToDb server action!")
+          toast.error('An error has occurred! Please try again!');
           return;
         }
 
         const userSessionId = clerkResult.createdSessionId;
 
         if (!userSessionId) {
-          toast.error("sign-in failed! Try again")
+          console.error("An error has occured: Could not find session id when creating user!")
+          toast.error("No session found. Please try again!")
         }
 
-        setSignUpActive({
+        await setSignUpActive({
           session: userSessionId,
         });
 
-        const setMetadataResult = await completeOnboarding()
-
-        if (setMetadataResult.error) {
-          toast.error(setMetadataResult.error)
-        }
 
         toast.success('Account created successfully!');
-        router.push('/home');
+        
     } catch (error) {
       console.error('An error occurred:', error);
       toast.error(
@@ -94,10 +91,10 @@ export const useAuthForm = (type: 'sign-in' | 'sign-up') => {
     }
 
     try {
-      const clerkResult = await signIn?.create({
+      const clerkResult = await signIn.create({
         strategy: "password",
         identifier: values.email,
-        password: values.password
+        password: values.password,
       })
 
     const userSessionId = clerkResult.createdSessionId;

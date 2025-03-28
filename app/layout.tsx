@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider afterSignOutUrl="/sign-in">
+    <ClerkProvider>
       <html lang='en'>
         <body className={`${robotoSans.variable} antialiased`}>
         {children}
